@@ -72,13 +72,27 @@ const variableSets = [
 export default function Component() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [currentImage, setCurrentImage] = useState(0)
-  const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: string }>({})
+  const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: string[] }>({})
 
   const handleAnswerSelect = (answer: string) => {
-    setSelectedAnswers((prev) => ({
-      ...prev,
-      [currentQuestion]: answer,
-    }))
+    setSelectedAnswers((prev) => {
+      const currentAnswers = prev[currentQuestion] || []
+      const isSelected = currentAnswers.includes(answer)
+
+      if (isSelected) {
+        // Remove the answer if already selected
+        return {
+          ...prev,
+          [currentQuestion]: currentAnswers.filter((a) => a !== answer),
+        }
+      } else {
+        // Add the answer if not selected
+        return {
+          ...prev,
+          [currentQuestion]: [...currentAnswers, answer],
+        }
+      }
+    })
   }
 
   const nextImage = () => {
@@ -167,19 +181,29 @@ export default function Component() {
               <CardContent className="space-y-6">
                 <h2 className="text-lg font-medium text-gray-900">{questions[currentQuestion].question}</h2>
 
-                {/* Answer Options */}
                 <div className="space-y-3">
-                  {questions[currentQuestion].options.map((option, index) => (
-                    <Button
-                      key={index}
-                      variant={selectedAnswers[currentQuestion] === option ? "default" : "outline"}
-                      className="text-gray-700 leading-relaxed whitespace-pre-line"
-                      onClick={() => handleAnswerSelect(option)}
-                    >
-                      <span className="font-medium mr-3">{String.fromCharCode(65 + index)}.</span>
-                      {option}
-                    </Button>
-                  ))}
+                  {questions[currentQuestion].options.map((option, index) => {
+                    const isSelected = selectedAnswers[currentQuestion]?.includes(option) || false
+                    return (
+                      <Button
+                        key={index}
+                        variant={isSelected ? "default" : "outline"}
+                        className={`leading-relaxed h-auto whitespace-pre-line p-4 ${isSelected ? "text-white" : "text-gray-700"}`}
+                        onClick={() => handleAnswerSelect(option)}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div
+                            className={`w-4 h-4 border-2 rounded flex items-center justify-center ${
+                              isSelected ? "bg-primary border-primary" : "border-gray-300"
+                            }`}
+                          >
+                          </div>
+                          <span className="font-medium">{String.fromCharCode(65 + index)}.</span>
+                          <span>{option}</span>
+                        </div>
+                      </Button>
+                    )
+                  })}
                 </div>
 
                 {/* Question Navigation */}
@@ -195,7 +219,11 @@ export default function Component() {
                   </Button>
 
                   <div className="text-sm text-gray-500">
-                    {Object.keys(selectedAnswers).length} of {questions.length} answered
+                    {
+                      Object.keys(selectedAnswers).filter((key) => selectedAnswers[Number.parseInt(key)]?.length > 0)
+                        .length
+                    }{" "}
+                    of {questions.length} answered
                   </div>
 
                   <Button
