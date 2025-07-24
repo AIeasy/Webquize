@@ -16,14 +16,29 @@ const questions = [
     input: "A single positive integer n (1 ≤ n ≤ 10) representing the number of rows in the pyramid. ",
     output: "Print n lines.\nThe i-th line should: \nStart with enough spaces to center the line. \nThen print numbers from 1 to i.\nThen print numbers from i-1 back down to 1.  ",
     actualOutput: "/Q1_Actual.png?height=200&width=300",
+    w:300,
+    h:300
+  },
+  {
+    id: 2,
+    question: "Which part of the code is wrong",
+    options: ["The condition if nums[i] % 4 == 0 causes an unintended break in control flow, and the loop resets i incorrectly.", "The inner continue bypasses the update of i for non-multiples of 4, causing the same number to be evaluated repeatedly. ", "The total += nums[i] line should occur before the continue, because continue skips all subsequent logic inside the loop. ", "The check for nums[i] % 4 == 0 should be outside the if nums[i] % 2 == 0 block to properly filter all multiples of 4.  "],
+    instruction: "The function should calculate the sum of all even numbers in a list, but skip any number that is a multiple of 4.\n The function will:\n 1.Takes a list of numbers. \n2.Calculates the sum of all even numbers, except those that are also multiples 4 ",
+    instructionImage: "/Q2_Example.png?height=300&width=300",
+    input: "List of Int.",
+    output: "Int = the sum of all even numbers in a list, but skip any number that is a multiple of 4.  ",
+    actualOutput: "/Q2_Actual.png?height=200&width=300",
   },
 
 ]
 
 const images = [
-  "/Q1_CODE_1.png?height=400&width=600",
+  ["/Q1_CODE_1.png?height=400&width=600",
   "/Q1_CODE_2.png?height=400&width=600",
-  "/Q1_CODE_3.png?height=400&width=600",
+  "/Q1_CODE_3.png?height=400&width=600",],
+  ["/Q2_CODE_1.png?height=400&width=600",
+    "/Q2_CODE_2.png?height=400&width=600",
+    "/Q2_CODE_3.png?height=400&width=600"]
 ]
 
 const variableSets = [
@@ -67,11 +82,11 @@ export default function Component() {
   }
 
   const nextImage = () => {
-    setCurrentImage((prev) => (prev + 1) % images.length)
+    setCurrentImage((prev) => (prev + 1) % images[currentQuestion].length)
   }
 
   const prevImage = () => {
-    setCurrentImage((prev) => (prev - 1 + images.length) % images.length)
+    setCurrentImage((prev) => (prev - 1 + images[currentQuestion].length) % images[currentQuestion].length)
   }
 
   const nextQuestion = () => {
@@ -109,109 +124,7 @@ export default function Component() {
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-6 h-full">
-          {/* Left Side - Instructions and Images */}
-          <div className="space-y-6">
-            {/* Variable Dashboard */}
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-lg font-semibold">Variable Dashboard</CardTitle>
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span className="text-xs text-gray-500">Live</span>
-                  </div>
-                </div>
-                <p className="text-sm text-gray-600 mt-1">{variableSets[currentImage].title}</p>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="max-h-64 overflow-y-auto space-y-2">
-                  {variableSets[currentImage].variables.map((variable, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center justify-between p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors border"
-                    >
-                      <div className="flex flex-col flex-1">
-                        <div className="flex items-center gap-2">
-                          <span className="font-mono text-sm font-medium text-gray-900">{variable.name}</span>
-                          <span
-                            className={`text-xs font-medium px-2 py-1 rounded ${getTypeColor(variable.type)} bg-gray-100`}
-                          >
-                            {variable.type}
-                          </span>
-                        </div>
-                        <span className="text-xs text-gray-500 mt-1">{variable.scope}</span>
-                      </div>
-                      <div className="font-mono text-sm text-gray-700 bg-white px-3 py-1 rounded border shadow-sm max-w-32 truncate">
-                        {variable.value}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="flex justify-between items-center pt-3 border-t text-xs text-gray-500">
-                  <span>{variableSets[currentImage].variables.length} variables</span>
-                  <span>
-                    Set {currentImage + 1} of {variableSets.length}
-                  </span>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Image Display Card */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg font-semibold">
-                  Reference Image ({currentImage + 1} of {images.length})
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="relative">
-                  <Image
-                    src={images[currentImage] || "/placeholder.svg"}
-                    alt={`Reference image ${currentImage + 1}`}
-                    width={600}
-                    height={500}
-                    className="w-full h-508 object-contain rounded-lg border bg-white"
-                  />
-                </div>
-
-                {/* Image Navigation */}
-                <div className="flex justify-between items-center">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={prevImage}
-                    disabled={images.length <= 1}
-                    className="flex items-center gap-2 bg-transparent"
-                  >
-                    <ChevronLeft className="w-4 h-4" />
-                    Previous
-                  </Button>
-
-                  <div className="flex space-x-2">
-                    {images.map((_, index) => (
-                      <div
-                        key={index}
-                        className={`w-2 h-2 rounded-full ${index === currentImage ? "bg-primary" : "bg-gray-300"}`}
-                      />
-                    ))}
-                  </div>
-
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={nextImage}
-                    disabled={images.length <= 1}
-                    className="flex items-center gap-2 bg-transparent"
-                  >
-                    Next
-                    <ChevronRight className="w-4 h-4" />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Right Side - Questions */}
+          {/* Left Side - Questions and Instructions */}
           <div className="space-y-6">
             {/* Instructions Widget */}
             <Card>
@@ -220,7 +133,6 @@ export default function Component() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="relative">
-
                 <p className="text-gray-700 leading-relaxed whitespace-pre-line">{questions[currentQuestion].instruction}</p>
                 <p><strong>Input:</strong>.</p>
                 <p className="text-gray-700 leading-relaxed whitespace-pre-line">{questions[currentQuestion].input}</p>
@@ -230,18 +142,18 @@ export default function Component() {
                   <Image
                     src={questions[currentQuestion].instructionImage || "/placeholder.svg"}
                     alt={`Instruction image for question ${currentQuestion + 1}`}
-                    width={60}
-                    height={60}
+                    width={300}
+                    height={200}
                     className="w-full max-w-[150px] mx-auto my-2 object-contain rounded-lg border bg-white"
                   />
                 </div>
-                <p><strong>Actual Output:</strong>.</p>
+                <p><strong>Actual:</strong>.</p>
                 <Image
                     src={questions[currentQuestion].actualOutput || "/placeholder.svg"}
                     alt={`Instruction image for question ${currentQuestion + 1}`}
-                    width={120}
-                    height={120}
-                    className="w-full max-w-[350px] mx-auto my-2 object-contain rounded-lg border bg-white"
+                    width={300}
+                    height={200}
+                    className="w-full max-w-[150px] mx-auto my-2 object-contain rounded-lg border bg-white"
                   />
               </CardContent>
             </Card>
@@ -324,6 +236,108 @@ export default function Component() {
                       style={{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }}
                     />
                   </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Right Side - Variable Dashboard and Images */}
+          <div className="space-y-6">
+            {/* Variable Dashboard */}
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-lg font-semibold">Variable Dashboard</CardTitle>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span className="text-xs text-gray-500">Live</span>
+                  </div>
+                </div>
+                <p className="text-sm text-gray-600 mt-1">{variableSets[currentImage].title}</p>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="max-h-64 overflow-y-auto space-y-2">
+                  {variableSets[currentImage].variables.map((variable, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors border"
+                    >
+                      <div className="flex flex-col flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono text-sm font-medium text-gray-900">{variable.name}</span>
+                          <span
+                            className={`text-xs font-medium px-2 py-1 rounded ${getTypeColor(variable.type)} bg-gray-100`}
+                          >
+                            {variable.type}
+                          </span>
+                        </div>
+                        <span className="text-xs text-gray-500 mt-1">{variable.scope}</span>
+                      </div>
+                      <div className="font-mono text-sm text-gray-700 bg-white px-3 py-1 rounded border shadow-sm max-w-32 truncate">
+                        {variable.value}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex justify-between items-center pt-3 border-t text-xs text-gray-500">
+                  <span>{variableSets[currentImage].variables.length} variables</span>
+                  <span>
+                    Set {currentImage + 1} of {variableSets.length}
+                  </span>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Image Display Card */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg font-semibold">
+                  Reference Image ({currentImage + 1} of {images[currentQuestion].length})
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="relative">
+                  <Image
+                    src={images[currentQuestion][currentImage] || "/placeholder.svg"}
+                    alt={`Reference image ${currentImage + 1}`}
+                    width={600}
+                    height={500}
+                    className="w-full h-508 object-contain rounded-lg border bg-white"
+                  />
+                </div>
+
+                {/* Image Navigation */}
+                <div className="flex justify-between items-center">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={prevImage}
+                    disabled={images[currentQuestion].length <= 1}
+                    className="flex items-center gap-2 bg-transparent"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                    Previous
+                  </Button>
+
+                  <div className="flex space-x-2">
+                    {images[currentQuestion].map((_, index) => (
+                      <div
+                        key={index}
+                        className={`w-2 h-2 rounded-full ${index === currentImage ? "bg-primary" : "bg-gray-300"}`}
+                      />
+                    ))}
+                  </div>
+
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={nextImage}
+                    disabled={images[currentQuestion].length <= 1}
+                    className="flex items-center gap-2 bg-transparent"
+                  >
+                    Next
+                    <ChevronRight className="w-4 h-4" />
+                  </Button>
                 </div>
               </CardContent>
             </Card>
