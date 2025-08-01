@@ -35,7 +35,15 @@ const questions = [
 const images = [
   ["/Q1_CODE_1.png?height=400&width=600",
   "/Q1_CODE_2.png?height=400&width=600",
-  "/Q1_CODE_3.png?height=400&width=600",],
+  "/Q1_CODE_3.png?height=400&width=600",
+  "/Q1_CODE_4.png?height=400&width=600",
+  "/Q1_CODE_5.png?height=400&width=600",
+  "/Q1_CODE_6.png?height=400&width=600",
+  "/Q1_CODE_7.png?height=400&width=600",
+  "/Q1_CODE_8.png?height=400&width=600",
+  "/Q1_CODE_9.png?height=400&width=600",
+  "/Q1_CODE_10.png?height=400&width=600",
+],
   ["/Q2_CODE_1.png?height=400&width=600",
     "/Q2_CODE_2.png?height=400&width=600",
     "/Q2_CODE_3.png?height=400&width=600"]
@@ -49,6 +57,13 @@ const variableSets = [
       { name: "n", type: "int", value: "5", scope: "local" },
       { name: "Consel_output", type: "String", value: "  ", scope: "global" },
     ],
+    terminalOutput: [
+      { type: "command", text: "$ run.py" },
+      { type: "output", text: " " },
+      //{ type: "output", text: '\xa0\xa0'+"1" },
+      //{ type: "output", text: '\xa0'+"12" },
+      //{ type: "output", text: "123" },
+    ],
   },
   {
     title: "JavaScript Variables - Set 2",
@@ -56,6 +71,13 @@ const variableSets = [
       { name: "i", type: "int", value: "1", scope: "local" },
       { name: "n", type: "int", value: "5", scope: "local" },
       { name: "Consel_output", type: "String", value: "  ", scope: "global" },
+    ],
+    terminalOutput: [
+      { type: "command", text: "$ run.py" },
+      //{ type: "output", text: " " },
+      //{ type: "output", text: '\xa0\xa0'+"1" },
+      //{ type: "output", text: '\xa0'+"12" },
+      //{ type: "output", text: "123" },
     ],
   },
   {
@@ -66,7 +88,127 @@ const variableSets = [
       { name: "j", type: "int", value: "1", scope: "local" },
       { name: "Consel_output", type: "String", value: "  ", scope: "global" },
     ],
+    terminalOutput: [
+      { type: "command", text: "$ run.py" },
+      { type: "output", text: '\xa0\xa0' },
+      //{ type: "output", text: '\xa0\xa0'+"1" },
+      //{ type: "output", text: '\xa0'+"12" },
+      //{ type: "output", text: "123" },
+    ],
   },
+  {
+    title: "JavaScript Variables - Set 4",
+    variables: [
+      { name: "i", type: "int", value: "1", scope: "local" },
+      { name: "n", type: "int", value: "5", scope: "local" },
+      { name: "j", type: "int", value: "1", scope: "local" },
+      { name: "Consel_output", type: "String", value: "  ", scope: "global" },
+    ],
+    terminalOutput: [
+      { type: "command", text: "$ run.py" },
+      { type: "output", text: '\xa0\xa0' },
+      //{ type: "output", text: '\xa0\xa0'+"1" },
+      //{ type: "output", text: '\xa0'+"12" },
+      //{ type: "output", text: "123" },
+    ],
+  },
+  {
+    title: "JavaScript Variables - Set 5",
+    variables: [
+      { name: "i", type: "int", value: "1", scope: "local" },
+      { name: "n", type: "int", value: "5", scope: "local" },
+      { name: "j", type: "int", value: "1", scope: "local" },
+      { name: "Consel_output", type: "String", value: "  ", scope: "global" },
+    ],
+    terminalOutput: [
+      { type: "command", text: "$ run.py" },
+      { type: "output", text: '\xa0\xa0' },
+      //{ type: "output", text: '\xa0\xa0'+"1" },
+      //{ type: "output", text: '\xa0'+"12" },
+      //{ type: "output", text: "123" },
+    ],
+  },
+  {
+    title: "JavaScript Variables - Set 6",
+    variables: [
+      { name: "i", type: "int", value: "1", scope: "local" },
+      { name: "n", type: "int", value: "5", scope: "local" },
+      { name: "j", type: "int", value: "1", scope: "local" },
+      { name: "Consel_output", type: "String", value: "  ", scope: "global" },
+    ],
+    terminalOutput: [
+      { type: "command", text: "$ run.py" },
+      { type: "output", text: '\xa0\xa0' },
+      //{ type: "output", text: '\xa0\xa0'+"1" },
+      //{ type: "output", text: '\xa0'+"12" },
+      //{ type: "output", text: "123" },
+    ],
+  },
+  {
+    title: "JavaScript Variables - Set 7",
+    variables: [
+      { name: "i", type: "int", value: "1", scope: "local" },
+      { name: "n", type: "int", value: "5", scope: "local" },
+      { name: "j", type: "int", value: "1", scope: "local" },
+      { name: "Consel_output", type: "String", value: "  ", scope: "global" },
+    ],
+    terminalOutput: [
+      { type: "command", text: "$ run.py" },
+      { type: "output", text: '\xa0\xa0' },
+      //{ type: "output", text: '\xa0\xa0'+"1" },
+      //{ type: "output", text: '\xa0'+"12" },
+      //{ type: "output", text: "123" },
+    ],
+  },
+  {
+    title: "JavaScript Variables - Set 8",
+    variables: [
+      { name: "i", type: "int", value: "1", scope: "local" },
+      { name: "n", type: "int", value: "5", scope: "local" },
+      { name: "j", type: "int", value: "1", scope: "local" },
+      { name: "Consel_output", type: "String", value: "  ", scope: "global" },
+    ],
+    terminalOutput: [
+      { type: "command", text: "$ run.py" },
+      { type: "output", text: '\xa0\xa0' },
+      //{ type: "output", text: '\xa0\xa0'+"1" },
+      //{ type: "output", text: '\xa0'+"12" },
+      //{ type: "output", text: "123" },
+    ],
+  },
+  {
+    title: "JavaScript Variables - Set 9",
+    variables: [
+      { name: "i", type: "int", value: "1", scope: "local" },
+      { name: "n", type: "int", value: "5", scope: "local" },
+      { name: "j", type: "int", value: "1", scope: "local" },
+      { name: "Consel_output", type: "String", value: "  ", scope: "global" },
+    ],
+    terminalOutput: [
+      { type: "command", text: "$ run.py" },
+      { type: "output", text: '\xa0\xa0' },
+      //{ type: "output", text: '\xa0\xa0'+"1" },
+      //{ type: "output", text: '\xa0'+"12" },
+      //{ type: "output", text: "123" },
+    ],
+  },
+  {
+    title: "JavaScript Variables - Set 10",
+    variables: [
+      { name: "i", type: "int", value: "1", scope: "local" },
+      { name: "n", type: "int", value: "5", scope: "local" },
+      { name: "j", type: "int", value: "1", scope: "local" },
+      { name: "Consel_output", type: "String", value: "  ", scope: "global" },
+    ],
+    terminalOutput: [
+      { type: "command", text: "$ run.py" },
+      { type: "output", text: '\xa0\xa0' },
+      //{ type: "output", text: '\xa0\xa0'+"1" },
+      //{ type: "output", text: '\xa0'+"12" },
+      //{ type: "output", text: "123" },
+    ],
+  },
+
 ]
 
 export default function Component() {
@@ -315,7 +457,41 @@ export default function Component() {
                 </div>
               </CardContent>
             </Card>
-
+            {/* Terminal Output Widget */}
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-lg font-semibold">Terminal Output</CardTitle>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span className="text-xs text-gray-500">Running</span>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="bg-gray-900 rounded-lg p-4 font-mono text-sm max-h-64 overflow-y-auto">
+                  {variableSets[currentImage].terminalOutput.map((line, index) => (
+                    <div
+                      key={index}
+                      className={`mb-1 ${
+                        line.type === "command"
+                          ? "text-green-400"
+                          : line.type === "error"
+                            ? "text-red-400"
+                            : line.type === "success"
+                              ? "text-green-300"
+                              : "text-gray-300"
+                      }`}
+                    >
+                      {line.text}
+                    </div>
+                  ))}
+                  <div className="text-green-400 mt-2">
+                    <span className="animate-pulse">█</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
             {/* Image Display Card */}
             <Card>
               <CardHeader>
