@@ -1,7 +1,18 @@
 "use client"
 
-import Component from "../quiz-page"
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
 
 export default function Page() {
-  return <Component />
+  const router = useRouter()
+  
+  useEffect(() => {
+    router.push("/quiz")
+  }, [router])
+  
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <p>Redirecting to quiz...</p>
+    </div>
+  )
 }
