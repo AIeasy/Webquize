@@ -39,7 +39,7 @@ export default function FinalSurveyPage() {
   }
 
   const validateForm = () => {
-    const requiredFields = ['easiestDebugger', 'mostEffectiveDebugger', 'fastestDebugger', 'futureDebugger']
+    const requiredFields = ['easiestDebugger', 'mostEffectiveDebugger', 'fastestDebugger', 'futureDebugger', 'technicalIssues', 'satisfaction']
     const newErrors: Record<string, boolean> = {}
     
     requiredFields.forEach(field => {
@@ -52,31 +52,46 @@ export default function FinalSurveyPage() {
     return Object.keys(newErrors).length === 0
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
     if (validateForm()) {
-      // In a real app, save data to server
-      // For now, just save to localStorage for demo
-      localStorage.setItem('finalSurvey', JSON.stringify(formData))
-      
-      // Generate markdown content
-      const quizAnswers = JSON.parse(localStorage.getItem('quizAnswers') || '{}')
-      const experienceSurveys = JSON.parse(localStorage.getItem('experienceSurveys') || '{}')
-      
-      const markdownContent = generateMarkdown(quizAnswers, experienceSurveys, formData)
-      
-      // Create a downloadable file
-      const blob = new Blob([markdownContent], { type: 'text/markdown' })
-      const url = URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = 'quiz_results.md'
-      document.body.appendChild(a)
-      a.click()
-      document.body.removeChild(a)
-      
-      router.push('/quiz/thank-you')
+      try {
+        // Save to localStorage
+        localStorage.setItem('finalSurvey', JSON.stringify(formData))
+        
+        // Gather all data
+        const demographicSurvey = JSON.parse(localStorage.getItem('demographicSurvey') || '{}')
+        const quizAnswers = JSON.parse(localStorage.getItem('quizAnswers') || '{}')
+        const experienceSurveys = JSON.parse(localStorage.getItem('experienceSurveys') || '{}')
+        
+        const allData = {
+          timestamp: new Date().toISOString(),
+          demographicSurvey,
+          quizAnswers,
+          experienceSurveys,
+          finalSurvey: formData
+        }
+        
+        // Send data to API endpoint
+        const response = await fetch('/api/save-results', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(allData)
+        })
+        
+        if (response.ok) {
+          console.log('Survey data submitted successfully!')
+          localStorage.clear() // Clear all local storage data
+          router.push('/quiz/thank-you')
+        } else {
+          console.error('Failed to submit survey data:', response.statusText)
+          alert('Failed to submit survey data. Please try again.')
+        }
+      } catch (error) {
+        console.error('Error submitting survey data:', error)
+        alert('An error occurred while submitting survey data. Please try again.')
+      }
     }
   }
   
@@ -169,8 +184,188 @@ ${JSON.stringify(finalSurvey, null, 2)}
                   )}
                 </div>
 
-                {/* Question 16 & 17 would go here */}
-                {/* ... */}
+                {/* Question 16 */}
+                <div className="space-y-3" data-error={formErrors.fastestDebugger || undefined}>
+                  <div className="flex items-start">
+                    <span className="text-red-500 font-medium mr-2">16.</span>
+                    <h3 className="text-lg font-medium text-red-500">Which debugger felt the fastest to use?</h3>
+                  </div>
+                  
+                  <RadioGroup 
+                    value={formData.fastestDebugger} 
+                    onValueChange={(value) => handleInputChange('fastestDebugger', value)}
+                    className="flex flex-col space-y-1 ml-6"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="debugger1" id="fastest-debugger1" />
+                      <Label htmlFor="fastest-debugger1">Debugger 1</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="debugger2" id="fastest-debugger2" />
+                      <Label htmlFor="fastest-debugger2">Debugger 2</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="debugger3" id="fastest-debugger3" />
+                      <Label htmlFor="fastest-debugger3">Debugger 3</Label>
+                    </div>
+                  </RadioGroup>
+                  
+                  {formErrors.fastestDebugger && (
+                    <p className="text-red-500 text-sm ml-6">Please select a debugger</p>
+                  )}
+                </div>
+
+                {/* Question 17 */}
+                <div className="space-y-3" data-error={formErrors.futureDebugger || undefined}>
+                  <div className="flex items-start">
+                    <span className="text-red-500 font-medium mr-2">17.</span>
+                    <h3 className="text-lg font-medium text-red-500">If you had to choose one debugger for future use, which would you choose?</h3>
+                  </div>
+                  
+                  <RadioGroup 
+                    value={formData.futureDebugger} 
+                    onValueChange={(value) => handleInputChange('futureDebugger', value)}
+                    className="flex flex-col space-y-1 ml-6"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="debugger1" id="future-debugger1" />
+                      <Label htmlFor="future-debugger1">Debugger 1</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="debugger2" id="future-debugger2" />
+                      <Label htmlFor="future-debugger2">Debugger 2</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="debugger3" id="future-debugger3" />
+                      <Label htmlFor="future-debugger3">Debugger 3</Label>
+                    </div>
+                  </RadioGroup>
+                  
+                  {formErrors.futureDebugger && (
+                    <p className="text-red-500 text-sm ml-6">Please select a debugger</p>
+                  )}
+                </div>
+
+                {/* Question 11 - Technical Issues */}
+                <div className="space-y-3" data-error={formErrors.technicalIssues || undefined}>
+                  <div className="flex items-start">
+                    <span className="text-red-500 font-medium mr-2">11.</span>
+                    <h3 className="text-lg font-medium text-red-500">Did you encounter technical issues during testing (e.g., device lag, delayed rendering)?</h3>
+                  </div>
+                  
+                  <RadioGroup 
+                    value={formData.technicalIssues} 
+                    onValueChange={(value) => handleInputChange('technicalIssues', value)}
+                    className="flex flex-col space-y-1 ml-6"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="none" id="tech-none" />
+                      <Label htmlFor="tech-none">None</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="1-2" id="tech-1-2" />
+                      <Label htmlFor="tech-1-2">1–2 times</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="3+" id="tech-3+" />
+                      <Label htmlFor="tech-3+">3+ times</Label>
+                    </div>
+                  </RadioGroup>
+                  
+                  {formErrors.technicalIssues && (
+                    <p className="text-red-500 text-sm ml-6">Please select an option</p>
+                  )}
+                </div>
+
+                {/* Question 12 - Satisfaction */}
+                <div className="space-y-3" data-error={formErrors.satisfaction || undefined}>
+                  <div className="flex items-start">
+                    <span className="text-red-500 font-medium mr-2">12.</span>
+                    <h3 className="text-lg font-medium text-red-500">How satisfied are you with the stability of the AR debugger?</h3>
+                    <p className="text-sm text-gray-500 ml-2">(1 = Very dissatisfied, 5 = Very satisfied)</p>
+                  </div>
+                  
+                  <RadioGroup 
+                    value={formData.satisfaction} 
+                    onValueChange={(value) => handleInputChange('satisfaction', value)}
+                    className="flex flex-row space-x-4 ml-6"
+                  >
+                    <div className="flex flex-col items-center space-y-1">
+                      <RadioGroupItem value="1" id="satisfaction-1" />
+                      <Label htmlFor="satisfaction-1">1</Label>
+                    </div>
+                    <div className="flex flex-col items-center space-y-1">
+                      <RadioGroupItem value="2" id="satisfaction-2" />
+                      <Label htmlFor="satisfaction-2">2</Label>
+                    </div>
+                    <div className="flex flex-col items-center space-y-1">
+                      <RadioGroupItem value="3" id="satisfaction-3" />
+                      <Label htmlFor="satisfaction-3">3</Label>
+                    </div>
+                    <div className="flex flex-col items-center space-y-1">
+                      <RadioGroupItem value="4" id="satisfaction-4" />
+                      <Label htmlFor="satisfaction-4">4</Label>
+                    </div>
+                    <div className="flex flex-col items-center space-y-1">
+                      <RadioGroupItem value="5" id="satisfaction-5" />
+                      <Label htmlFor="satisfaction-5">5</Label>
+                    </div>
+                  </RadioGroup>
+                  
+                  {formErrors.satisfaction && (
+                    <p className="text-red-500 text-sm ml-6">Please select a rating</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Open-Ended Questions Section */}
+              <div className="space-y-6">
+                <h2 className="text-xl font-semibold text-red-500">Open-Ended Questions</h2>
+                
+                {/* Question 13 - Most Useful Feature */}
+                <div className="space-y-3">
+                  <div className="flex items-start">
+                    <span className="text-red-500 font-medium mr-2">13.</span>
+                    <h3 className="text-lg font-medium text-red-500">What feature of the AR debugger did you find most useful? Please explain briefly.</h3>
+                  </div>
+                  
+                  <Textarea
+                    value={formData.mostUsefulFeature}
+                    onChange={(e) => handleInputChange('mostUsefulFeature', e.target.value)}
+                    className="min-h-[100px] ml-6"
+                    placeholder="Type your answer here..."
+                  />
+                </div>
+
+                {/* Question 14 - Improvement Needed */}
+                <div className="space-y-3">
+                  <div className="flex items-start">
+                    <span className="text-red-500 font-medium mr-2">14.</span>
+                    <h3 className="text-lg font-medium text-red-500">What aspect of the tool needs the most improvement?</h3>
+                  </div>
+                  
+                  <Textarea
+                    value={formData.improvementNeeded}
+                    onChange={(e) => handleInputChange('improvementNeeded', e.target.value)}
+                    className="min-h-[100px] ml-6"
+                    placeholder="Type your answer here..."
+                  />
+                </div>
+
+                {/* Question 15 - Additional Comments */}
+                <div className="space-y-3">
+                  <div className="flex items-start">
+                    <span className="text-red-500 font-medium mr-2">15.</span>
+                    <h3 className="text-lg font-medium text-red-500">Additional comments or suggestions:</h3>
+                  </div>
+                  
+                  <Textarea
+                    value={formData.additionalComments}
+                    onChange={(e) => handleInputChange('additionalComments', e.target.value)}
+                    className="min-h-[100px] ml-6"
+                    placeholder="Type your additional comments here..."
+                  />
+                </div>
               </div>
 
               {/* Submit Button */}

@@ -75,7 +75,7 @@ export default function ExperienceSurveyPage() {
       localStorage.setItem('experienceSurveys', JSON.stringify(experienceSurveys))
       
       // Navigate based on which debugger we just evaluated
-      if (debuggerId === '3') {
+      if (debuggerId === '3' || nextQuestion === 'final') {
         router.push("/quiz/final-survey")
       } else {
         router.push(`/quiz/${nextQuestion}`)
