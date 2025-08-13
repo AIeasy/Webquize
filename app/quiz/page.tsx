@@ -23,7 +23,7 @@ export default function QuizHome() {
                 You will need to complete all questions in sequence. Before starting the quiz, you will be asked to complete a brief background survey.
               </p>
               
-              <Link href="/quiz/survey">
+              <Link href="/quiz/sanity-check">
                 <Button className="w-full text-lg py-6" size="lg">
                   Start Test
                 </Button>

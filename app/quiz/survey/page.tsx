@@ -15,11 +15,13 @@ export default function SurveyPage() {
   const [formData, setFormData] = useState({
     age: "",
     gender: "",
+    genderOther: "",
     education: "",
     major: "",
     disability: "",
+    disabilityDetails: "",
     programmingExperience: "",
-    courses: "",
+    courses: [] as string[],
     pythonProficiency: "",
     goggleExperience: "",
     arVrComfort: "",
@@ -30,7 +32,7 @@ export default function SurveyPage() {
 
   const [formErrors, setFormErrors] = useState<Record<string, boolean>>({})
 
-  const handleInputChange = (field: string, value: string) => {
+  const handleInputChange = (field: string, value: string | string[]) => {
     setFormData({
       ...formData,
       [field]: value
@@ -44,6 +46,14 @@ export default function SurveyPage() {
     }
   }
 
+  const handleCheckboxChange = (courseId: string, checked: boolean) => {
+    if (checked) {
+      handleInputChange('courses', [...formData.courses, courseId])
+    } else {
+      handleInputChange('courses', formData.courses.filter(id => id !== courseId))
+    }
+  }
+
   const validateForm = () => {
     const requiredFields = ['age', 'gender', 'education', 'programmingExperience']
     const newErrors: Record<string, boolean> = {}
@@ -54,6 +64,16 @@ export default function SurveyPage() {
       }
     })
     
+    // Special validation for gender "other" option
+    if (formData.gender === "other" && !formData.genderOther) {
+      newErrors.genderOther = true
+    }
+
+    // Special validation for disability "yes" option
+    if (formData.disability === "yes" && !formData.disabilityDetails) {
+      newErrors.disabilityDetails = true
+    }
+    
     setFormErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -62,8 +82,10 @@ export default function SurveyPage() {
     e.preventDefault()
     
     if (validateForm()) {
-      // In a real application, you would save the survey data
-      // For now, just navigate to the first question
+      // Save survey data to localStorage
+      localStorage.setItem('demographicSurvey', JSON.stringify(formData))
+      
+      // Navigate to the first question
       router.push("/quiz/1")
     } else {
       // Scroll to the first error
@@ -84,48 +106,35 @@ export default function SurveyPage() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-8">
-              {/* Age Range */}
+              {/* Age Range - Fill in the blank */}
               <div className="space-y-3" data-error={formErrors.age || undefined}>
                 <div className="flex items-center">
-                  <span className="text-blue-600 font-medium mr-2">1.</span>
-                  <h3 className="text-lg font-medium">What is your age range?</h3>
-                  
+                  <span className="font-medium mr-2">1.</span>
+                  <h3 className="text-lg font-medium">What is your age?</h3>
+                  <span className="ml-2">(fill in the blank)</span>
                 </div>
                 
-                <RadioGroup 
-                  value={formData.age} 
-                  onValueChange={(value) => handleInputChange('age', value)}
-                  className="flex flex-col space-y-1 ml-6"
-                >
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="18-20" id="age-18-20" />
-                    <Label htmlFor="age-18-20">18-20 years</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="21-23" id="age-21-23" />
-                    <Label htmlFor="age-21-23">21-23 years</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="24-26" id="age-24-26" />
-                    <Label htmlFor="age-24-26">24-26 years</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="27+" id="age-27+" />
-                    <Label htmlFor="age-27+">27+ years</Label>
-                  </div>
-                </RadioGroup>
+                <div className="ml-6">
+                  <Input
+                    value={formData.age}
+                    onChange={(e) => handleInputChange('age', e.target.value)}
+                    className="border-gray-300 max-w-xs"
+                    placeholder="Enter your age"
+                    type="number"
+                    min="18"
+                  />
+                </div>
                 
                 {formErrors.age && (
-                  <p className="text-blue-500 text-sm ml-6">Please select your age range</p>
+                  <p className="text-gray-600 text-sm ml-6">Please enter your age</p>
                 )}
               </div>
 
-              {/* Gender */}
+              {/* Gender - Added "Other" option */}
               <div className="space-y-3" data-error={formErrors.gender || undefined}>
                 <div className="flex items-center">
-                  <span className="text-blue-600 font-medium mr-2">2.</span>
-                  <h3 className="text-lg font-medium text-blue-600">Gender</h3>
-                  <span className="text-blue-600 ml-2">(make sure people can specify their gender)</span>
+                  <span className="font-medium mr-2">2.</span>
+                  <h3 className="text-lg font-medium">Gender</h3>
                 </div>
                 
                 <RadioGroup 
@@ -135,28 +144,46 @@ export default function SurveyPage() {
                 >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="male" id="gender-male" />
-                    <Label htmlFor="gender-male" className="text-blue-500">Male</Label>
+                    <Label htmlFor="gender-male">Male</Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="female" id="gender-female" />
-                    <Label htmlFor="gender-female" className="text-blue-500">Female</Label>
+                    <Label htmlFor="gender-female">Female</Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="prefer-not-to-say" id="gender-prefer-not-to-say" />
-                    <Label htmlFor="gender-prefer-not-to-say" className="text-blue-500">Prefer not to say</Label>
+                    <Label htmlFor="gender-prefer-not-to-say">Prefer not to say</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="other" id="gender-other" />
+                    <Label htmlFor="gender-other">Other</Label>
                   </div>
                 </RadioGroup>
                 
+                {formData.gender === "other" && (
+                  <div className="ml-6 mt-2">
+                    <Input
+                      value={formData.genderOther}
+                      onChange={(e) => handleInputChange('genderOther', e.target.value)}
+                      className="border-gray-300 max-w-xs"
+                      placeholder="Please specify"
+                    />
+                    {formErrors.genderOther && (
+                      <p className="text-gray-600 text-sm mt-1">Please specify your gender</p>
+                    )}
+                  </div>
+                )}
+                
                 {formErrors.gender && (
-                  <p className="text-blue-500 text-sm ml-6">Please select your gender</p>
+                  <p className="text-gray-600 text-sm ml-6">Please select your gender</p>
                 )}
               </div>
 
               {/* Education Level */}
               <div className="space-y-3" data-error={formErrors.education || undefined}>
                 <div className="flex items-center">
-                  <span className="text-blue-600 font-medium mr-2">3.</span>
-                  <h3 className="text-lg font-medium text-blue-500">What is your level of education (e.g., Undergraduate - Year 1/2/3/4, Graduate, etc.)</h3>
+                  <span className="font-medium mr-2">3.</span>
+                  <h3 className="text-lg font-medium">What is your level of education?</h3>
                 </div>
                 
                 <RadioGroup 
@@ -166,69 +193,89 @@ export default function SurveyPage() {
                 >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="year1" id="edu-year1" />
-                    <Label htmlFor="edu-year1" className="text-blue-500">Year 1</Label>
+                    <Label htmlFor="edu-year1">Undergraduate - Year 1</Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="year2" id="edu-year2" />
-                    <Label htmlFor="edu-year2" className="text-blue-500">Year 2</Label>
+                    <Label htmlFor="edu-year2">Undergraduate - Year 2</Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="year3" id="edu-year3" />
-                    <Label htmlFor="edu-year3" className="text-blue-500">Year 3</Label>
+                    <Label htmlFor="edu-year3">Undergraduate - Year 3</Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="year4" id="edu-year4" />
-                    <Label htmlFor="edu-year4" className="text-blue-500">Year 4</Label>
+                    <Label htmlFor="edu-year4">Undergraduate - Year 4</Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="graduate" id="edu-graduate" />
-                    <Label htmlFor="edu-graduate" className="text-blue-500">Graduate</Label>
+                    <Label htmlFor="edu-graduate">Graduate</Label>
                   </div>
                 </RadioGroup>
                 
                 {formErrors.education && (
-                  <p className="text-blue-500 text-sm ml-6">Please select your education level</p>
+                  <p className="text-gray-600 text-sm ml-6">Please select your education level</p>
                 )}
               </div>
 
               {/* Major/Field of Study */}
               <div className="space-y-3">
                 <div className="flex items-center">
-                  <span className="text-blue-600 font-medium mr-2">4.</span>
-                  <h3 className="text-lg font-medium text-blue-500">What Major/Field of Study you are taking currently?</h3>
+                  <span className="font-medium mr-2">4.</span>
+                  <h3 className="text-lg font-medium">What Major/Field of Study you are taking currently?</h3>
                 </div>
                 
                 <div className="ml-6">
                   <Input
                     value={formData.major}
                     onChange={(e) => handleInputChange('major', e.target.value)}
-                    className="border-blue-500"
+                    className="border-gray-300"
                     placeholder="Your major/field of study"
                   />
                 </div>
               </div>
 
-              {/* Disability */}
-              <div className="space-y-3">
+              {/* Disability - Added Yes/No options */}
+              <div className="space-y-3" data-error={formErrors.disability || undefined}>
                 <div className="flex items-center">
-                  <span className="text-blue-600 font-medium mr-2">5.</span>
-                  <h3 className="text-lg font-medium text-blue-500">Do you have any disability or anything we need to know before you start this experiment? (if "YES" please fill in the blank below, if "NO" leave blank)</h3>
+                  <span className="font-medium mr-2">5.</span>
+                  <h3 className="text-lg font-medium">Do you have any disability or anything we need to know before you start this experiment?</h3>
                 </div>
                 
-                <div className="ml-6">
-                  <Textarea
-                    value={formData.disability}
-                    onChange={(e) => handleInputChange('disability', e.target.value)}
-                    className="border-blue-500"
-                    placeholder="Optional - leave blank if not applicable"
-                  />
-                </div>
+                <RadioGroup 
+                  value={formData.disability} 
+                  onValueChange={(value) => handleInputChange('disability', value)}
+                  className="flex space-x-6 ml-6"
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="yes" id="disability-yes" />
+                    <Label htmlFor="disability-yes">Yes</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="no" id="disability-no" />
+                    <Label htmlFor="disability-no">No</Label>
+                  </div>
+                </RadioGroup>
+                
+                {formData.disability === "yes" && (
+                  <div className="ml-6 mt-2">
+                    <Textarea
+                      value={formData.disabilityDetails}
+                      onChange={(e) => handleInputChange('disabilityDetails', e.target.value)}
+                      className="border-gray-300"
+                      placeholder="Please provide details"
+                    />
+                    {formErrors.disabilityDetails && (
+                      <p className="text-gray-600 text-sm mt-1">Please provide details about your disability</p>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* Programming Experience */}
               <div className="space-y-3" data-error={formErrors.programmingExperience || undefined}>
                 <div className="flex items-center">
-                  <span className="text-blue-600 font-medium mr-2">6.</span>
+                  <span className="font-medium mr-2">6.</span>
                   <h3 className="text-lg font-medium">How long have you been learning programming?</h3>
                 </div>
                 
@@ -260,66 +307,140 @@ export default function SurveyPage() {
                 </RadioGroup>
                 
                 {formErrors.programmingExperience && (
-                  <p className="text-blue-500 text-sm ml-6">Please select your programming experience</p>
+                  <p className="text-gray-600 text-sm ml-6">Please select your programming experience</p>
                 )}
               </div>
 
-              {/* Programming Courses */}
+              {/* Programming Courses - Changed to multi-select checkboxes */}
               <div className="space-y-3">
                 <div className="flex items-center">
-                  <span className="text-blue-600 font-medium mr-2">7.</span>
-                  <h3 className="text-lg font-medium text-blue-600">Please list the programming courses have taken:</h3>
+                  <span className="font-medium mr-2">7.</span>
+                  <h3 className="text-lg font-medium">Which programming courses have you taken? (select all that apply)</h3>
                 </div>
                 
-                <div className="ml-6">
-                  <Textarea
-                    value={formData.courses}
-                    onChange={(e) => handleInputChange('courses', e.target.value)}
-                    className="border-blue-500"
-                    placeholder="List your programming courses"
-                  />
+                <div className="ml-6 space-y-2">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="course-eecs1012" 
+                      checked={formData.courses.includes("eecs1012")}
+                      onCheckedChange={(checked) => handleCheckboxChange("eecs1012", checked === true)}
+                    />
+                    <Label htmlFor="course-eecs1012">EECS 1012 - Introduction to Computing: Web-Based Systems</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="course-eecs1015" 
+                      checked={formData.courses.includes("eecs1015")}
+                      onCheckedChange={(checked) => handleCheckboxChange("eecs1015", checked === true)}
+                    />
+                    <Label htmlFor="course-eecs1015">EECS 1015 - Introduction to Computer Science and Programming</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="course-eecs1022" 
+                      checked={formData.courses.includes("eecs1022")}
+                      onCheckedChange={(checked) => handleCheckboxChange("eecs1022", checked === true)}
+                    />
+                    <Label htmlFor="course-eecs1022">EECS 1022 - Programming for Mobile Computing</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="course-eecs2030" 
+                      checked={formData.courses.includes("eecs2030")}
+                      onCheckedChange={(checked) => handleCheckboxChange("eecs2030", checked === true)}
+                    />
+                    <Label htmlFor="course-eecs2030">EECS 2030 - Advanced Object Oriented Programming</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="course-eecs2011" 
+                      checked={formData.courses.includes("eecs2011")}
+                      onCheckedChange={(checked) => handleCheckboxChange("eecs2011", checked === true)}
+                    />
+                    <Label htmlFor="course-eecs2011">EECS 2011 - Fundamentals of Data Structures</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="course-other" 
+                      checked={formData.courses.includes("other")}
+                      onCheckedChange={(checked) => handleCheckboxChange("other", checked === true)}
+                    />
+                    <Label htmlFor="course-other">Other programming courses</Label>
+                  </div>
                 </div>
               </div>
 
-              {/* Python Proficiency */}
+              {/* Python Proficiency - Changed to select options */}
               <div className="space-y-3">
                 <div className="flex items-center">
-                  <span className="text-blue-600 font-medium mr-2">8.</span>
-                  <h3 className="text-lg font-medium text-blue-600">What is your self-assessed Python proficiency?</h3>
+                  <span className="font-medium mr-2">8.</span>
+                  <h3 className="text-lg font-medium">What is your self-assessed Python proficiency?</h3>
                 </div>
                 
-                <div className="ml-6">
-                  <Input
-                    value={formData.pythonProficiency}
-                    onChange={(e) => handleInputChange('pythonProficiency', e.target.value)}
-                    className="border-blue-500"
-                    placeholder="Your Python proficiency"
-                  />
-                </div>
+                <RadioGroup 
+                  value={formData.pythonProficiency} 
+                  onValueChange={(value) => handleInputChange('pythonProficiency', value)}
+                  className="flex flex-col space-y-1 ml-6"
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="beginner" id="python-beginner" />
+                    <Label htmlFor="python-beginner">Beginner - I know basic syntax and can write simple scripts</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="intermediate" id="python-intermediate" />
+                    <Label htmlFor="python-intermediate">Intermediate - I can write functions, use libraries, and build small applications</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="advanced" id="python-advanced" />
+                    <Label htmlFor="python-advanced">Advanced - I can build complex applications and understand advanced concepts</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="expert" id="python-expert" />
+                    <Label htmlFor="python-expert">Expert - I have deep knowledge of Python internals and can optimize complex code</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="none" id="python-none" />
+                    <Label htmlFor="python-none">No experience with Python</Label>
+                  </div>
+                </RadioGroup>
               </div>
 
-              {/* Goggle Experience */}
+              {/* Goggle Experience - Changed to select options */}
               <div className="space-y-3">
                 <div className="flex items-center">
-                  <span className="text-blue-600 font-medium mr-2">9.</span>
-                  <h3 className="text-lg font-medium text-blue-600">Previous experience with the goggle</h3>
+                  <span className="font-medium mr-2">9.</span>
+                  <h3 className="text-lg font-medium">Previous experience with AR/VR goggles</h3>
                 </div>
                 
-                <div className="ml-6">
-                  <Input
-                    value={formData.goggleExperience}
-                    onChange={(e) => handleInputChange('goggleExperience', e.target.value)}
-                    className="border-blue-500"
-                    placeholder="Your experience with the goggle"
-                  />
-                </div>
+                <RadioGroup 
+                  value={formData.goggleExperience} 
+                  onValueChange={(value) => handleInputChange('goggleExperience', value)}
+                  className="flex flex-col space-y-1 ml-6"
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="none" id="goggle-none" />
+                    <Label htmlFor="goggle-none">No experience</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="limited" id="goggle-limited" />
+                    <Label htmlFor="goggle-limited">Limited experience (tried once or twice)</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="moderate" id="goggle-moderate" />
+                    <Label htmlFor="goggle-moderate">Moderate experience (occasional use)</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="extensive" id="goggle-extensive" />
+                    <Label htmlFor="goggle-extensive">Extensive experience (regular use)</Label>
+                  </div>
+                </RadioGroup>
               </div>
 
               {/* AR/VR Comfort */}
               <div className="space-y-3">
                 <div className="flex items-center">
-                  <span className="text-blue-600 font-medium mr-2">10.</span>
-                  <h3 className="text-lg font-medium text-blue-600">Rate your comfort level using AR/VR tools.</h3>
+                  <span className="font-medium mr-2">10.</span>
+                  <h3 className="text-lg font-medium">Rate your comfort level using AR/VR tools.</h3>
                 </div>
                 
                 <p className="ml-6 text-sm text-gray-600">(Likert scale: Not comfortable at all → Very comfortable)</p>
@@ -354,27 +475,41 @@ export default function SurveyPage() {
                 </RadioGroup>
               </div>
 
-              {/* Motion Sickness */}
+              {/* Motion Sickness - Changed to select options */}
               <div className="space-y-3">
                 <div className="flex items-center">
-                  <span className="text-blue-600 font-medium mr-2">11.</span>
-                  <h3 className="text-lg font-medium text-blue-600">Do you experience motion sickness or discomfort with VR?</h3>
+                  <span className="font-medium mr-2">11.</span>
+                  <h3 className="text-lg font-medium">Do you experience motion sickness or discomfort with VR?</h3>
                 </div>
                 
-                <div className="ml-6">
-                  <Input
-                    value={formData.motionSickness}
-                    onChange={(e) => handleInputChange('motionSickness', e.target.value)}
-                    className="border-blue-500"
-                    placeholder="Your experience with motion sickness in VR"
-                  />
-                </div>
+                <RadioGroup 
+                  value={formData.motionSickness} 
+                  onValueChange={(value) => handleInputChange('motionSickness', value)}
+                  className="flex flex-col space-y-1 ml-6"
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="none" id="motion-none" />
+                    <Label htmlFor="motion-none">No, I don't experience any motion sickness</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="mild" id="motion-mild" />
+                    <Label htmlFor="motion-mild">Mild discomfort occasionally</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="moderate" id="motion-moderate" />
+                    <Label htmlFor="motion-moderate">Moderate discomfort frequently</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="severe" id="motion-severe" />
+                    <Label htmlFor="motion-severe">Severe discomfort most of the time</Label>
+                  </div>
+                </RadioGroup>
               </div>
 
               {/* Debugging Tools */}
               <div className="space-y-3">
                 <div className="flex items-center">
-                  <span className="text-blue-600 font-medium mr-2">13.</span>
+                  <span className="font-medium mr-2">13.</span>
                   <h3 className="text-lg font-medium">Have you used other debugging tools before (e.g., Python Tutor, traditional IDE debuggers)?</h3>
                 </div>
                 
@@ -394,29 +529,35 @@ export default function SurveyPage() {
                 </RadioGroup>
               </div>
 
-              {/* Debugging Experience */}
+              {/* Debugging Experience - Changed to select options */}
               <div className="space-y-3">
                 <div className="flex items-start">
-                  <span className="text-blue-600 font-medium mr-2">14.</span>
-                  <div>
-                    <h3 className="text-lg font-medium">
-                      
-                      <span className="text-blue-600">Are you usually debugging your code?</span>
-                      <span className="text-blue-500"> if yes, what is your </span>
-                      debugging experiences
-                    </h3>
-                    
-                  </div>
+                  <span className="font-medium mr-2">14.</span>
+                  <h3 className="text-lg font-medium">Are you usually debugging your code?</h3>
                 </div>
                 
-                <div className="ml-6">
-                  <Textarea
-                    value={formData.debuggingExperience}
-                    onChange={(e) => handleInputChange('debuggingExperience', e.target.value)}
-                    className="border-blue-500"
-                    placeholder="Your debugging experience"
-                  />
-                </div>
+                <RadioGroup 
+                  value={formData.debuggingExperience} 
+                  onValueChange={(value) => handleInputChange('debuggingExperience', value)}
+                  className="flex flex-col space-y-1 ml-6"
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="rarely" id="debug-exp-rarely" />
+                    <Label htmlFor="debug-exp-rarely">I rarely debug my code</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="sometimes" id="debug-exp-sometimes" />
+                    <Label htmlFor="debug-exp-sometimes">I sometimes debug my code, but find it difficult</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="often" id="debug-exp-often" />
+                    <Label htmlFor="debug-exp-often">I often debug my code and am comfortable with basic debugging</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="very-often" id="debug-exp-very-often" />
+                    <Label htmlFor="debug-exp-very-often">I very often debug my code and am proficient with debugging tools</Label>
+                  </div>
+                </RadioGroup>
               </div>
 
               {/* Submit Button */}

@@ -94,8 +94,8 @@ export default function ExperienceSurveyPage() {
       <div className="max-w-4xl mx-auto">
         <Card className="shadow-lg">
           <CardHeader>
-            <CardTitle className="text-2xl font-bold text-center text-red-500">User Experience</CardTitle>
-            <p className="text-center text-red-500">(Scale from 1 to 5, 1 = poor, 5 = good)</p>
+            <CardTitle className="text-2xl font-bold text-center">User Experience</CardTitle>
+            <p className="text-center text-gray-600">(Scale from 1 to 5, 1 = poor, 5 = good)</p>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-8">
@@ -106,8 +106,8 @@ export default function ExperienceSurveyPage() {
               {/* Question 1 */}
               <div className="space-y-3" data-error={formErrors.interface || undefined}>
                 <div className="flex items-center">
-                  <span className="text-red-500 font-medium mr-2">1.</span>
-                  <h3 className="text-lg font-medium text-red-500">The interface of this debugger is easy to understand and use.</h3>
+                  <span className="font-medium mr-2">1.</span>
+                  <h3 className="text-lg font-medium">The interface of this debugger is easy to understand and use.</h3>
                 </div>
                 
                 <RadioGroup 
@@ -138,15 +138,15 @@ export default function ExperienceSurveyPage() {
                 </RadioGroup>
                 
                 {formErrors.interface && (
-                  <p className="text-red-500 text-sm ml-6">Please select a rating</p>
+                  <p className="text-gray-600 text-sm ml-6">Please select a rating</p>
                 )}
               </div>
 
               {/* Question 2 */}
               <div className="space-y-3" data-error={formErrors.bugLocation || undefined}>
                 <div className="flex items-center">
-                  <span className="text-red-500 font-medium mr-2">2.</span>
-                  <h3 className="text-lg font-medium text-red-500">I was able to locate the bug(s) efficiently using this debugger.</h3>
+                  <span className="font-medium mr-2">2.</span>
+                  <h3 className="text-lg font-medium">I was able to locate the bug(s) efficiently using this debugger.</h3>
                 </div>
                 
                 <RadioGroup 
@@ -177,15 +177,15 @@ export default function ExperienceSurveyPage() {
                 </RadioGroup>
                 
                 {formErrors.bugLocation && (
-                  <p className="text-red-500 text-sm ml-6">Please select a rating</p>
+                  <p className="text-gray-600 text-sm ml-6">Please select a rating</p>
                 )}
               </div>
 
               {/* Question 3 */}
               <div className="space-y-3" data-error={formErrors.control || undefined}>
                 <div className="flex items-center">
-                  <span className="text-red-500 font-medium mr-2">3.</span>
-                  <h3 className="text-lg font-medium text-red-500">I felt in control while using this debugger.</h3>
+                  <span className="font-medium mr-2">3.</span>
+                  <h3 className="text-lg font-medium">I felt in control while using this debugger.</h3>
                 </div>
                 
                 <RadioGroup 
@@ -216,15 +216,15 @@ export default function ExperienceSurveyPage() {
                 </RadioGroup>
                 
                 {formErrors.control && (
-                  <p className="text-red-500 text-sm ml-6">Please select a rating</p>
+                  <p className="text-gray-600 text-sm ml-6">Please select a rating</p>
                 )}
               </div>
 
               {/* Question 4 */}
               <div className="space-y-3" data-error={formErrors.futureUse || undefined}>
                 <div className="flex items-center">
-                  <span className="text-red-500 font-medium mr-2">4.</span>
-                  <h3 className="text-lg font-medium text-red-500">I would consider using this debugger in future projects.</h3>
+                  <span className="font-medium mr-2">4.</span>
+                  <h3 className="text-lg font-medium">I would consider using this debugger in future projects.</h3>
                 </div>
                 
                 <RadioGroup 
@@ -255,15 +255,15 @@ export default function ExperienceSurveyPage() {
                 </RadioGroup>
                 
                 {formErrors.futureUse && (
-                  <p className="text-red-500 text-sm ml-6">Please select a rating</p>
+                  <p className="text-gray-600 text-sm ml-6">Please select a rating</p>
                 )}
               </div>
 
               {/* Question 5 */}
               <div className="space-y-3" data-error={formErrors.faster || undefined}>
                 <div className="flex items-center">
-                  <span className="text-red-500 font-medium mr-2">5.</span>
-                  <h3 className="text-lg font-medium text-red-500">This debugger helped me complete the debugging task faster.</h3>
+                  <span className="font-medium mr-2">5.</span>
+                  <h3 className="text-lg font-medium">This debugger helped me complete the debugging task faster.</h3>
                 </div>
                 
                 <RadioGroup 
@@ -294,7 +294,7 @@ export default function ExperienceSurveyPage() {
                 </RadioGroup>
                 
                 {formErrors.faster && (
-                  <p className="text-red-500 text-sm ml-6">Please select a rating</p>
+                  <p className="text-gray-600 text-sm ml-6">Please select a rating</p>
                 )}
               </div>
 

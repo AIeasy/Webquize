@@ -120,13 +120,13 @@ ${JSON.stringify(finalSurvey, null, 2)}
             <form onSubmit={handleSubmit} className="space-y-8">
               {/* Debugger Comparison Section */}
               <div className="space-y-6">
-                <h2 className="text-xl font-semibold text-red-500">Debugger Comparison</h2>
+                <h2 className="text-xl font-semibold">Debugger Comparison</h2>
                 
                 {/* Question 14 */}
                 <div className="space-y-3" data-error={formErrors.easiestDebugger || undefined}>
                   <div className="flex items-start">
-                    <span className="text-red-500 font-medium mr-2">14.</span>
-                    <h3 className="text-lg font-medium text-red-500">Which debugger was the easiest to use?</h3>
+                    <span className="font-medium mr-2">14.</span>
+                    <h3 className="text-lg font-medium">Which debugger was the easiest to use?</h3>
                   </div>
                   
                   <RadioGroup 
@@ -149,15 +149,15 @@ ${JSON.stringify(finalSurvey, null, 2)}
                   </RadioGroup>
                   
                   {formErrors.easiestDebugger && (
-                    <p className="text-red-500 text-sm ml-6">Please select a debugger</p>
+                    <p className="text-gray-600 text-sm ml-6">Please select a debugger</p>
                   )}
                 </div>
 
                 {/* Question 15 */}
                 <div className="space-y-3" data-error={formErrors.mostEffectiveDebugger || undefined}>
                   <div className="flex items-start">
-                    <span className="text-red-500 font-medium mr-2">15.</span>
-                    <h3 className="text-lg font-medium text-red-500">Which debugger helped you locate bugs most effectively?</h3>
+                    <span className="font-medium mr-2">15.</span>
+                    <h3 className="text-lg font-medium">Which debugger helped you locate bugs most effectively?</h3>
                   </div>
                   
                   <RadioGroup 
@@ -180,15 +180,15 @@ ${JSON.stringify(finalSurvey, null, 2)}
                   </RadioGroup>
                   
                   {formErrors.mostEffectiveDebugger && (
-                    <p className="text-red-500 text-sm ml-6">Please select a debugger</p>
+                    <p className="text-gray-600 text-sm ml-6">Please select a debugger</p>
                   )}
                 </div>
 
                 {/* Question 16 */}
                 <div className="space-y-3" data-error={formErrors.fastestDebugger || undefined}>
                   <div className="flex items-start">
-                    <span className="text-red-500 font-medium mr-2">16.</span>
-                    <h3 className="text-lg font-medium text-red-500">Which debugger felt the fastest to use?</h3>
+                    <span className="font-medium mr-2">16.</span>
+                    <h3 className="text-lg font-medium">Which debugger felt the fastest to use?</h3>
                   </div>
                   
                   <RadioGroup 
@@ -211,15 +211,15 @@ ${JSON.stringify(finalSurvey, null, 2)}
                   </RadioGroup>
                   
                   {formErrors.fastestDebugger && (
-                    <p className="text-red-500 text-sm ml-6">Please select a debugger</p>
+                    <p className="text-gray-600 text-sm ml-6">Please select a debugger</p>
                   )}
                 </div>
 
                 {/* Question 17 */}
                 <div className="space-y-3" data-error={formErrors.futureDebugger || undefined}>
                   <div className="flex items-start">
-                    <span className="text-red-500 font-medium mr-2">17.</span>
-                    <h3 className="text-lg font-medium text-red-500">If you had to choose one debugger for future use, which would you choose?</h3>
+                    <span className="font-medium mr-2">17.</span>
+                    <h3 className="text-lg font-medium">If you had to choose one debugger for future use, which would you choose?</h3>
                   </div>
                   
                   <RadioGroup 
@@ -242,15 +242,15 @@ ${JSON.stringify(finalSurvey, null, 2)}
                   </RadioGroup>
                   
                   {formErrors.futureDebugger && (
-                    <p className="text-red-500 text-sm ml-6">Please select a debugger</p>
+                    <p className="text-gray-600 text-sm ml-6">Please select a debugger</p>
                   )}
                 </div>
 
                 {/* Question 11 - Technical Issues */}
                 <div className="space-y-3" data-error={formErrors.technicalIssues || undefined}>
                   <div className="flex items-start">
-                    <span className="text-red-500 font-medium mr-2">11.</span>
-                    <h3 className="text-lg font-medium text-red-500">Did you encounter technical issues during testing (e.g., device lag, delayed rendering)?</h3>
+                    <span className="font-medium mr-2">11.</span>
+                    <h3 className="text-lg font-medium">Did you encounter technical issues during testing (e.g., device lag, delayed rendering)?</h3>
                   </div>
                   
                   <RadioGroup 
@@ -273,15 +273,15 @@ ${JSON.stringify(finalSurvey, null, 2)}
                   </RadioGroup>
                   
                   {formErrors.technicalIssues && (
-                    <p className="text-red-500 text-sm ml-6">Please select an option</p>
+                    <p className="text-gray-600 text-sm ml-6">Please select an option</p>
                   )}
                 </div>
 
                 {/* Question 12 - Satisfaction */}
                 <div className="space-y-3" data-error={formErrors.satisfaction || undefined}>
                   <div className="flex items-start">
-                    <span className="text-red-500 font-medium mr-2">12.</span>
-                    <h3 className="text-lg font-medium text-red-500">How satisfied are you with the stability of the AR debugger?</h3>
+                    <span className="font-medium mr-2">12.</span>
+                    <h3 className="text-lg font-medium">How satisfied are you with the stability of the AR debugger?</h3>
                     <p className="text-sm text-gray-500 ml-2">(1 = Very dissatisfied, 5 = Very satisfied)</p>
                   </div>
                   
@@ -313,20 +313,20 @@ ${JSON.stringify(finalSurvey, null, 2)}
                   </RadioGroup>
                   
                   {formErrors.satisfaction && (
-                    <p className="text-red-500 text-sm ml-6">Please select a rating</p>
+                    <p className="text-gray-600 text-sm ml-6">Please select a rating</p>
                   )}
                 </div>
               </div>
 
               {/* Open-Ended Questions Section */}
               <div className="space-y-6">
-                <h2 className="text-xl font-semibold text-red-500">Open-Ended Questions</h2>
+                <h2 className="text-xl font-semibold">Open-Ended Questions</h2>
                 
                 {/* Question 13 - Most Useful Feature */}
                 <div className="space-y-3">
                   <div className="flex items-start">
-                    <span className="text-red-500 font-medium mr-2">13.</span>
-                    <h3 className="text-lg font-medium text-red-500">What feature of the AR debugger did you find most useful? Please explain briefly.</h3>
+                    <span className="font-medium mr-2">13.</span>
+                    <h3 className="text-lg font-medium">What feature of the AR debugger did you find most useful? Please explain briefly.</h3>
                   </div>
                   
                   <Textarea
@@ -340,8 +340,8 @@ ${JSON.stringify(finalSurvey, null, 2)}
                 {/* Question 14 - Improvement Needed */}
                 <div className="space-y-3">
                   <div className="flex items-start">
-                    <span className="text-red-500 font-medium mr-2">14.</span>
-                    <h3 className="text-lg font-medium text-red-500">What aspect of the tool needs the most improvement?</h3>
+                    <span className="font-medium mr-2">14.</span>
+                    <h3 className="text-lg font-medium">What aspect of the tool needs the most improvement?</h3>
                   </div>
                   
                   <Textarea
@@ -355,8 +355,8 @@ ${JSON.stringify(finalSurvey, null, 2)}
                 {/* Question 15 - Additional Comments */}
                 <div className="space-y-3">
                   <div className="flex items-start">
-                    <span className="text-red-500 font-medium mr-2">15.</span>
-                    <h3 className="text-lg font-medium text-red-500">Additional comments or suggestions:</h3>
+                    <span className="font-medium mr-2">15.</span>
+                    <h3 className="text-lg font-medium">Additional comments or suggestions:</h3>
                   </div>
                   
                   <Textarea
