@@ -7,6 +7,7 @@ import { ChevronLeft, ChevronRight, Play } from "lucide-react"
 import Link from "next/link"
 import { questions } from "@/lib/quiz-data"
 import { useRouter } from "next/navigation"
+import { launchUnity } from "@/lib/unity-launcher"
 
 export default function Question5Page() {
   const router = useRouter()
@@ -39,8 +40,8 @@ export default function Question5Page() {
 
   const nextQuestion = () => {
     if (questionId < questions.length - 1) {
-      // If we're at question 4, redirect to experience survey
-      if (questionId === 3) {
+      // If we're at question 5 (index 4), redirect to experience survey
+      if (questionId === 4) {
         router.push(`/quiz/experience-survey?next=${questionId + 2}`)
       } else {
         router.push(`/quiz/${questionId + 2}`)
@@ -54,10 +55,21 @@ export default function Question5Page() {
     }
   }
 
-  // Placeholder function for visualization feature (in development)
-  const startVisualization = () => {
-    // Feature in development
-    alert("Visualization feature is currently under development")
+  // Function to launch Unity and automatically play the scene
+  const startVisualization = async () => {
+    setIsVisualizing(true);
+    try {
+      // Pass question number 5 to the launchUnity function
+      const success = await launchUnity(5);
+      if (!success) {
+        alert("Failed to launch Unity. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error launching Unity:", error);
+      alert("An error occurred while launching Unity.");
+    } finally {
+      setIsVisualizing(false);
+    }
   }
 
   return (
@@ -198,16 +210,26 @@ export default function Question5Page() {
           </CardHeader>
           <CardContent>
             <div className="text-center py-12">
-              <p className="text-gray-500 mb-4">The visualization feature is currently under development.</p>
-              <p className="text-gray-400 text-sm">When completed, it will help you understand how the code processes the grid and where the bug might be.</p>
-              <div className="mt-8">
-                <p className="text-sm text-gray-500 mb-2">Coming soon:</p>
-                <ul className="text-sm text-gray-500 list-disc list-inside">
-                  <li>Step-by-step code execution</li>
-                  <li>Visual representation of the grid at each step</li>
-                  <li>Detailed explanations of each operation</li>
-                </ul>
-              </div>
+              {isVisualizing ? (
+                <div className="flex flex-col items-center">
+                  <div className="w-12 h-12 border-4 border-t-blue-500 border-r-transparent border-b-transparent border-l-transparent rounded-full animate-spin mb-4"></div>
+                  <p className="text-gray-700">Launching Unity...</p>
+                  <p className="text-gray-500 text-sm mt-2">Please wait while Unity is starting and loading your project.</p>
+                </div>
+              ) : (
+                <div>
+                  <p className="text-gray-700 mb-4">Click the "Visualize Code Execution" button to launch Unity with the Question 5 project and automatically play the scene.</p>
+                  <p className="text-gray-500 text-sm">This will help you understand how the code processes the grid and where the bug might be.</p>
+                  <div className="mt-8">
+                    <p className="text-sm text-gray-700 mb-2">Features:</p>
+                    <ul className="text-sm text-gray-600 list-disc list-inside">
+                      <li>3D visualization of the algorithm</li>
+                      <li>Step-by-step code execution</li>
+                      <li>Visual representation of the grid at each step</li>
+                    </ul>
+                  </div>
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>
