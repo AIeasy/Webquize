@@ -24,7 +24,7 @@ public class AutoPlayOnLaunch
         // Check if we were launched with the command line argument
         string[] args = System.Environment.GetCommandLineArgs();
         bool shouldAutoPlay = false;
-        int questionNumber = 6; // Default to question 6
+        int questionNumber = 6;
         
         for (int i = 0; i < args.Length; i++)
         {
@@ -57,7 +57,8 @@ public class AutoPlayOnLaunch
                 try
                 {
                     // Try to open the scene for the specific question
-                    string scenePath = $"Assets/Scenes/question{questionNumber}.unity";
+                    
+                    string scenePath = $"Assets/Scenes/Question 5 Final.unity";
                     
                     if (File.Exists(Path.Combine(Application.dataPath.Replace("Assets", ""), scenePath)))
                     {

@@ -50,77 +50,47 @@ public class EditorAutoPlay
         PlayScene();
     }
 
-    // This method will be called when Unity is launched with -executeMethod EditorAutoPlay.PlayScene
-    [MenuItem("Tools/Auto Play Scene")]
-    public static void PlayScene()
+    // ...existing code...
+[MenuItem("Tools/Auto Play Scene")]
+public static void PlayScene()
+{
+    Debug.Log("Auto Play Scene triggered via command line");
+
+    // Hardcoded scene path
+    string scenePath = "Assets/Scenes/Question 5 Final.unity";
+
+    EditorApplication.delayCall += () =>
     {
-        Debug.Log("Auto Play Scene triggered via command line");
-        
-        // Get the question number from command line arguments
-        int questionNumber = 6; // Default to question 6
-        string[] args = Environment.GetCommandLineArgs();
-        for (int i = 0; i < args.Length; i++)
+        try
         {
-            if (args[i] == "-questionNumber" && i + 1 < args.Length)
+            Debug.Log($"Attempting to open scene: {scenePath}");
+
+            // Check if the scene exists
+            if (File.Exists(Path.Combine(Application.dataPath.Replace("Assets", ""), scenePath)))
             {
-                if (int.TryParse(args[i + 1], out int parsedNumber))
+                // Open the scene
+                EditorSceneManager.OpenScene(scenePath);
+                Debug.Log($"Opened scene: {scenePath}");
+
+                // Use another delay to ensure scene is fully loaded
+                EditorApplication.delayCall += () =>
                 {
-                    questionNumber = parsedNumber;
-                    Debug.Log($"Found question number from command line: {questionNumber}");
-                }
+                    // Start playing the scene
+                    EditorApplication.isPlaying = true;
+                    Debug.Log($"Scene playback started automatically for {scenePath}");
+                };
+            }
+            else
+            {
+                Debug.LogError($"Scene not found: {scenePath}");
             }
         }
-        
-        // Use a delay to ensure Unity is fully loaded
-        EditorApplication.delayCall += () =>
+        catch (Exception e)
         {
-            try
-            {
-                // Open the specified question scene
-                string scenePath = $"Assets/Scenes/question{questionNumber}.unity";
-                
-                Debug.Log($"Attempting to open scene: {scenePath}");
-                
-                // Check if the scene exists
-                if (File.Exists(Path.Combine(Application.dataPath.Replace("Assets", ""), scenePath)))
-                {
-                    // Open the scene
-                    EditorSceneManager.OpenScene(scenePath);
-                    Debug.Log($"Opened scene: {scenePath}");
-                    
-                    // Use another delay to ensure scene is fully loaded
-                    EditorApplication.delayCall += () =>
-                    {
-                        // Start playing the scene
-                        EditorApplication.isPlaying = true;
-                        Debug.Log($"Scene playback started automatically for question {questionNumber}");
-                    };
-                }
-                else
-                {
-                    Debug.LogError($"Scene not found: {scenePath}");
-                    
-                    // Fallback to question6 scene if the specified scene doesn't exist
-                    string fallbackScenePath = "Assets/Scenes/question6.unity";
-                    if (File.Exists(Path.Combine(Application.dataPath.Replace("Assets", ""), fallbackScenePath)))
-                    {
-                        EditorSceneManager.OpenScene(fallbackScenePath);
-                        Debug.Log($"Opened fallback scene: {fallbackScenePath}");
-                        
-                        // Use another delay to ensure scene is fully loaded
-                        EditorApplication.delayCall += () =>
-                        {
-                            EditorApplication.isPlaying = true;
-                            Debug.Log($"Scene playback started automatically for fallback scene");
-                        };
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.LogError($"Error playing scene: {e.Message}");
-            }
-        };
-    }
+            Debug.LogError($"Error playing scene: {e.Message}");
+        }
+    };
+}
+// ...existing code...
 }
 #endif

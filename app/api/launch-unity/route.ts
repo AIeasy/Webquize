@@ -16,8 +16,7 @@ async function findMostRecentUnityProject(baseDir: string): Promise<string> {
   try {
     // List of directories to search for Unity projects
     const searchDirs = [
-      "H:\\github projects\\VRAR_PythonGame",
-      "H:\\Unity Projects"
+      "C:\\Users\\denis\\Desktop\\Test-main\\My project (2)",
     ];
     
     let projects: { path: string; mtime: Date }[] = [];
@@ -67,11 +66,11 @@ async function findMostRecentUnityProject(baseDir: string): Promise<string> {
     }
     
     // Fallback to default project path
-    return "H:\\github projects\\VRAR_PythonGame\\UnityProject";
+    return "C:\\Users\\denis\\Desktop\\Test-main\\My project (2)";
   } catch (error) {
     console.error("Error finding most recent Unity project:", error);
     // Fallback to default project path
-    return "H:\\github projects\\VRAR_PythonGame\\UnityProject";
+    return "C:\\Users\\denis\\Desktop\\Test-main\\My project (2)";
   }
 }
 
@@ -84,8 +83,7 @@ export async function POST(request: Request) {
     }
     
     // Use the specific project path for question6
-    const projectPath = "H:\\github projects\\VRAR_PythonGame\\test\\question6";
-    
+    const projectPath = "C:\\Users\\denis\\Desktop\\Test-main\\My project (2)";
     // Copy the auto-play scripts to the Unity project's Editor folder
     const editorFolderPath = path.join(projectPath, "Assets", "Editor");
     
@@ -112,8 +110,8 @@ export async function POST(request: Request) {
       // Continue even if copy fails, as the script might already be there
     }
     
-    // Pass the question number as an argument to the EditorAutoPlay script
-    const command = `start "" "${unityPath}" -projectPath "${projectPath}" -executeMethod EditorAutoPlay.PlayScene -questionNumber ${questionNumber}`;
+   
+    const command = `start "" "${unityPath}" -projectPath "${projectPath}" -executeMethod EditorAutoPlay.PlayScene`;
     
     console.log(`Executing command: ${command} for question ${questionNumber}`);
     

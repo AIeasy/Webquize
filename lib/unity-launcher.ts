@@ -5,7 +5,7 @@
 export const launchUnity = async (questionNumber: number = 6): Promise<boolean> => {
   try {
     // Path to Unity executable
-    const unityPath = "H:\\Unity\\Unity Editor\\2022.3.36f1\\Editor\\Unity.exe";
+    const unityPath = "C:\\Program Files\\Unity\\Hub\\Editor\\6000.1.12f1\\Editor\\Unity.exe";
     
     // Send the Unity path and question number to the API
     const response = await window.fetch('/api/launch-unity', {
